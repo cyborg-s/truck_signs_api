@@ -121,6 +121,8 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    ```
 
 - ### Start the PostgreSQL database container:
+   > [!NOTE]
+   > Do **not** expose port 5432 to the internet on a public server!
    ```bash
    docker run -d \
    --name postgres-db \
@@ -132,8 +134,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    --restart unless-stopped \
    postgres:13
    ```
-   > [!NOTE]
-   > Do **not** expose port 5432 to the internet on a public server!
+
 
 
 - ### Build and start the backend Container:
