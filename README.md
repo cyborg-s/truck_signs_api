@@ -1,3 +1,163 @@
+# Truck Signs API
+
+### A modern, containerized app that was developed with Django and can be deployed via Docker.
+
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Prerequisites](#prerequisites)
+3. [Quickstart](#quickstart)
+4. [Usage](#usage)
+    - [Generate and config .env](#generate-and-configure-the-env-file)
+    - [Start Postgres-DB](#start-the-postgresql-database-container)
+    - [Build and start the backend Container](#build-and-start-the-backend-container)
+
+---
+
+## Introduction
+
+This full-stack application provides a backend service for managing a web store for truck signs.
+It uses PostgreSQL as a database and can be flexibly configured and deployed using Docker and an optional .env file.
+
+---
+
+## Prerequisites
+
+- A Debian V-Server
+- Docker
+- Git
+
+
+---
+
+## Quickstart
+
+1. **Install dependencies:**
+   ```bash
+   sudo apt update && sudo apt install -y docker.io git
+   ```
+
+2. **Clone the repository:**
+   ```bash
+   git clone git@github.com:MarcelDechant/truck_signs_api.git
+   cd truck_signs_api
+   ```
+
+3. **Generate and configure the `.env` file:**  
+   Copy the provided template and adjust it to your needs:
+   ```bash
+   cp truck_signs_designs/settings/simple_env_config.env \
+   truck_signs_designs/settings/.env
+   ```
+   ```bash
+   nano truck_signs_designs/settings/.env
+   ```
+
+4. **Create the Docker network:**
+    ```bash
+    docker network create <YOUR_NETWORK_NAME>
+    ```
+
+5. **Start the PostgreSQL database container:**
+   ```bash
+   docker run -d \
+   --name postgres-db \
+   --network <YOUR_NETWORK_NAME> \
+   -e POSTGRES_DB=truckdb \
+   -e POSTGRES_USER=truckuser \
+   -e POSTGRES_PASSWORD=truckpass \
+   -v pgdata:/var/lib/postgresql/data \
+   --restart unless-stopped \
+   postgres:13
+   ```
+
+6. **Build the Docker image:**
+   ```bash
+   docker build -t trucksigns-backend .
+   ```
+
+7. **Start the backend container:**
+   ```bash
+   docker run -d \
+   --name trucksigns-backend \
+   --network <YOUR_NETWORK_NAME> \
+   --env-file .env \
+   -v static_data:/app/static \
+   -v media_data:/app/media \
+   -p 8020:8000 \
+   --restart unless-stopped \
+   trucksigns-backend
+   ```
+
+8. **Access the admin panel:**
+   ```bash
+   http://<YOUR_SERVER_IP>:8020/admin
+   ```
+
+---
+
+## Usage
+
+- ### Generate and configure the `.env` file:
+  
+  Copy the provided template and adjust it to your needs:
+   ```bash
+   cp truck_signs_designs/settings/simple_env_config.env \
+   truck_signs_designs/settings/.env
+   ```
+   ```bash
+   nano truck_signs_designs/settings/.env
+   ```
+
+   Important variables:
+   ```env
+   DOCKER_DB_HOST=truck_db
+   DOCKER_DB_PORT=5432
+   DJANGO_SUPERUSER_USERNAME=<YOUR_ADMIN_NAME>
+   DJANGO_SUPERUSER_EMAIL=<YOUR_ADMIN_EMAIL_ADDRESS>
+   DJANGO_SUPERUSER_PASSWORD=<PASSWORD>
+   ALLOWED_HOSTS=127.0.0.1
+   ```
+
+- ### Start the PostgreSQL database container:
+   ```bash
+   docker run -d \
+   --name postgres-db \
+   --network <YOUR_NETWORK_NAME> \
+   -e POSTGRES_DB=truckdb \
+   -e POSTGRES_USER=truckuser \
+   -e POSTGRES_PASSWORD=truckpass \
+   -v pgdata:/var/lib/postgresql/data \
+   --restart unless-stopped \
+   postgres:13
+   ```
+   > [!NOTE]
+   > Do **not** expose port 5432 to the internet on a public server!
+
+
+- ### Build and start the backend Container:
+   Build the Docker image:
+   ```bash
+   docker build -t trucksigns-backend .
+   ```
+
+   Start the backend container:
+   ```bash
+   docker run -d \
+   --name trucksigns-backend \
+   --network <YOUR_NETWORK_NAME> \
+   --env-file .env \
+   -v static_data:/app/static \
+   -v media_data:/app/media \
+   -p 8020:8000 \
+   --restart unless-stopped \
+   trucksigns-backend
+   ```
+   > [!NOTE]
+   > you can map the port to every you want with *-p PORT:8000*
+---
+
 <div align="center">
 
 ![Truck Signs](./screenshots/Truck_Signs_logo.png)
