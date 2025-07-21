@@ -10,11 +10,13 @@ done
 echo "PostgreSQL is active"
 
 python manage.py collectstatic --noinput
-python manage.py migrate
 python manage.py makemigrations
+python manage.py migrate
 
+echo "Postgresql migrations finished"
 
 echo "Running createsuperuser (if not exists) ..."
+
 python manage.py shell <<EOF
 import os
 from django.contrib.auth import get_user_model
@@ -39,6 +41,6 @@ echo "Starting Gunicorn ..."
 gunicorn truck_signs_designs.wsgi:application --bind 0.0.0.0:8000
 
 
-echo "Postgresql migrations finished"
+
 
 python manage.py runserver

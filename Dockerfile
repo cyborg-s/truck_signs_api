@@ -1,36 +1,28 @@
-# Use official Python 3.8.1 slim image
-FROM python:3.8.1-slim
+# Verwende ein aktuelles, schlankes Python-Image
+FROM python:3.12-slim
 
-# Set environment variables for Python
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Installiere Systemabhängigkeiten (für DB-Wait und Paketbuilds)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    netcat \
+    gcc \
+    build-essential \
+ && rm -rf /var/lib/apt/lists/*
 
-# Install system dependencies needed (netcat für den DB-Check)
-RUN echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until && \
-    sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
-    sed -i '/buster-updates/d' /etc/apt/sources.list
-RUN apt-get update && apt-get install -y \
-netcat \
-gcc \
-build-essential \ 
-&& rm -rf /var/lib/apt/lists/*
-
-# Set working directory
+# Setze das Arbeitsverzeichnis
 WORKDIR /app
 
-
-# Copy project file into the container
+# Kopiere den Code in das Container-Image
 COPY . .
 
-# Install Python dependencies
-RUN python -m pip install --no-cache-dir -r requirements.txt
+# Installiere Python-Abhängigkeiten
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Set execute permissions für entrypoint.sh
+# Mache entrypoint.sh ausführbar
 RUN chmod +x /app/entrypoint.sh
 
-# Expose Django port
+# Öffne Port 8000 (Django Standard)
 EXPOSE 8000
 
-# Entrypoint setzen
+# Setze den Entrypoint
 ENTRYPOINT ["/app/entrypoint.sh"]
