@@ -3,7 +3,11 @@ FROM python:3.12-slim
 
 # Installiere Systemabhängigkeiten (für DB-Wait und Paketbuilds)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    netcat \
+    libpq-dev \
+    libffi-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    netcat-openbsd \
     gcc \
     build-essential \
  && rm -rf /var/lib/apt/lists/*
