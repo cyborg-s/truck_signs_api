@@ -122,9 +122,9 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    docker run -d \
    --name postgres-db \
    --network <YOUR_NETWORK_NAME> \
-   -e POSTGRES_DB=truckdb \
-   -e POSTGRES_USER=truckuser \
-   -e POSTGRES_PASSWORD=truckpass \
+   -e POSTGRES_DB=<YOUR_DB_NAME> \
+   -e POSTGRES_USER=<YOUR_DB_USERNAME> \
+   -e POSTGRES_PASSWORD=<YOUR_DB_PASSWORD> \
    -v pgdata:/var/lib/postgresql/data \
    --restart unless-stopped \
    postgres:13
