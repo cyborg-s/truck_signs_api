@@ -47,6 +47,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    ```bash
    docker run -d \
    --name postgres-db \
+   --network <YOUR_NETWORK_NAME> \
    -e POSTGRES_DB=<YOUR_DB_NAME> \
    -e POSTGRES_USER=<YOUR_DB_USERNAME> \
    -e POSTGRES_PASSWORD=<YOUR_DB_PASSWORD> \
@@ -66,6 +67,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    ```bash
    docker run -d \
    --name trucksigns-backend \
+   --network <YOUR_NETWORK_NAME> \
    -v static_data:/app/static \
    -v media_data:/app/media \
    -p 8020:8000 \
