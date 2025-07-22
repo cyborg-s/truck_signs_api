@@ -10,7 +10,7 @@ done
 echo "PostgreSQL is active"
 
 python manage.py collectstatic --noinput
-python manage.py makemigrations
+
 python manage.py migrate
 
 echo "Postgresql migrations finished"

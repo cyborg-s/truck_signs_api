@@ -4,8 +4,7 @@ from .base import *
 DEBUG = True
 
 env = environ.Env()
-# reading env file
-environ.Env.read_env()
+env.read_env(os.path.join(BASE_DIR, '..', '.env'))
 
 SECRET_KEY = env("DOCKER_SECRET_KEY")
 DEBUG = True
@@ -20,10 +19,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': env('DOCKER_DB_NAME'),
-        'USER': env('DOCKER_DB_USER'),
-        'PASSWORD': env('DOCKER_DB_PASSWORD'),
-        'HOST': env('DOCKER_DB_HOST'),
-        'PORT': env('DOCKER_DB_PORT'),
+        'USER': env('DOCKER_DB_USER', default='user'),
+        'PASSWORD': env('DOCKER_DB_PASSWORD', default='password'),
+        'HOST': env('DOCKER_DB_HOST', default='localhost'),
+        'PORT': env('DOCKER_DB_PORT', default='5432'),
     }
 }
 

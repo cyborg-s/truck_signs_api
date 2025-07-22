@@ -39,8 +39,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
 
 1. **Generate the `.env` file:**  
    ```bash
-   cp truck_signs_designs/settings/simple_env_config.env \
-   truck_signs_designs/settings/.env
+   cp truck_signs_designs/settings/simple_env_config.env .env
    ```
 
 
@@ -67,7 +66,6 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    ```bash
    docker run -d \
    --name trucksigns-backend \
-   --env-file .env \
    -v static_data:/app/static \
    -v media_data:/app/media \
    -p 8020:8000 \
@@ -95,7 +93,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
 - ### Configure the `.env` file:
   Copy the supplied template and adapt it to your needs:
    ```bash
-   nano truck_signs_designs/settings/.env
+   nano .env
    ```
 
    Important variables:
@@ -142,7 +140,6 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    docker run -d \
    --name trucksigns-backend \
    --network <YOUR_NETWORK_NAME> \
-   --env-file .env \
    -v static_data:/app/static \
    -v media_data:/app/media \
    -p 8020:8000 \
