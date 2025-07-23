@@ -120,8 +120,8 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    --name <YOUR_CONTAINER_NAME> \   #The name you find it in the Container list.
    --network <YOUR_NETWORK_NAME> \   
    -e POSTGRES_DB=<YOUR_DB_NAME> \  #The name you add to the `.env`
-   -e POSTGRES_USER=<YOUR_DB_USERNAME> \  #Add the name also to the `.env` to connect backend with the DB
-   -e POSTGRES_PASSWORD=<YOUR_DB_PASSWORD> \  #This too.
+   -e POSTGRES_USER=<YOUR_DB_USERNAME> \  #Add it to <DOCKER_DB_USER> in the `.env` to connect backend with the DB
+   -e POSTGRES_PASSWORD=<YOUR_DB_PASSWORD> \  #This to <DOCKER_DB_PASSWORD>.
    -v pgdata:/var/lib/postgresql/data \
    --restart unless-stopped \
    postgres:13
