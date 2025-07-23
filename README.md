@@ -9,12 +9,10 @@
 2. [Prerequisites](#prerequisites)
 3. [Quickstart](#quickstart)
 4. [Usage](#usage)
-    - [Install dependencies](#install-dependencies)
-    - [Clone the Repository](#clone-the-repository)
     - [Config .env](#configure-the-env-file)
     - [Create the Docker Networt](#create-the-docker-network-optional)
     - [Start Postgres-DB](#start-the-postgres-database-container)
-    - [Build and start the backend Container](#build-and-start-the-backend-container)
+    - [Start the backend Container](#start-the-backend-container)
     - [Access to the administration panel](#access-to-the-administration-panel)
 5. [Truck Signs Api Notes](#notes-to-the-application)
 
@@ -46,7 +44,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
 2. **Start the Postgres database:**
    ```bash
    docker run -d \
-   --name postgres-db \
+   --name <YOUR_CONTAINER_NAME> \
    --network <YOUR_NETWORK_NAME> \
    -e POSTGRES_DB=<YOUR_DB_NAME> \
    -e POSTGRES_USER=<YOUR_DB_USERNAME> \
@@ -59,7 +57,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
 
 3. **Build the Docker image:**
    ```bash
-   docker build -t trucksigns-backend .
+   docker build -t <IMMAGE_NAME> .
    ```
 
 
@@ -72,7 +70,7 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
    -v media_data:/app/media \
    -p 8020:8000 \
    --restart unless-stopped \
-   trucksigns-backend
+   <IMMAGE_NAME>
    ```
 
 
@@ -80,36 +78,35 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
 
 ## Usage
 
-- ### Install dependencies:
-   ```bash
-   sudo apt update && sudo apt install -y docker.io git
-   ```
-
-
-- ### Clone the repository:
-   ```bash
-   git clone git@github.com:cyborg-s/truck_signs_api.git
-   ```
-
 
 - ### Configure the `.env` file:
-  Copy the supplied template and adapt it to your needs:
    ```bash
    nano .env
    ```
 
    Important variables:
    ```env
-   DOCKER_DB_HOST=truck_db
-   DOCKER_DB_PORT=5432
+   DOCKER_DB_HOST=<YOUR_DB_NAME>
+   DOCKER_DB_PORT=<YOUR_DB_PORT>
    DJANGO_SUPERUSER_USERNAME=<YOUR_ADMIN_NAME>
    DJANGO_SUPERUSER_EMAIL=<YOUR_ADMIN_EMAIL_ADDRESS>
    DJANGO_SUPERUSER_PASSWORD=<PASSWORD>
    ALLOWED_HOSTS=127.0.0.1
    ```
 
+   ***Effects of Changing the Values***
+   |Variable |	Description and Effect
+   |:--------|-----------------------:|
+   |DOCKER_DB_HOST	| Defines the hostname of the PostgreSQL container. Adapt it to your DB name to ensure the connection.|
+   |DOCKER_DB_PORT	| Sets the port to access PostgreSQL. Must match the used port. Wrong value = connection refused.|
+   |DJANGO_SUPERUSER_USERNAME	| Sets the admin login name to Create it automatically.|
+   |DJANGO_SUPERUSER_EMAIL	| Used for admin contact.|
+   |DJANGO_SUPERUSER_PASSWORD	| Sets the admin password. Should be strong. |
+   |ALLOWED_HOSTS	| Restricts which hosts can access Django. Incorrect values cause 400 Bad Request errors.|
+
 
 - ### Create the Docker network: (optional)
+   This helps you to connect database with the Backend.
     ```bash
     docker network create <YOUR_NETWORK_NAME>
     ```
@@ -117,36 +114,32 @@ It uses PostgreSQL as a database and can be flexibly configured and deployed usi
 
 - ### Start the Postgres database:
    > [!NOTE]
-   > Do NOT release port 5432 on a public server for the Internet!
+   > Do NOT release port 5432 on a public server for the Internet, you do NOT need a direct connection via the Internet!
    ```bash
    docker run -d \
-   --name postgres-db \
-   --network <YOUR_NETWORK_NAME> \
-   -e POSTGRES_DB=<YOUR_DB_NAME> \
-   -e POSTGRES_USER=<YOUR_DB_USERNAME> \
-   -e POSTGRES_PASSWORD=<YOUR_DB_PASSWORD> \
+   --name <YOUR_CONTAINER_NAME> \   #The name you find it in the Container list.
+   --network <YOUR_NETWORK_NAME> \   
+   -e POSTGRES_DB=<YOUR_DB_NAME> \  #The name you add to the `.env`
+   -e POSTGRES_USER=<YOUR_DB_USERNAME> \  #Add the name also to the `.env` to connect backend with the DB
+   -e POSTGRES_PASSWORD=<YOUR_DB_PASSWORD> \  #This too.
    -v pgdata:/var/lib/postgresql/data \
    --restart unless-stopped \
    postgres:13
    ```
 
 
-- ### Build and start the backend Container:
-   Build the Docker image:
-   ```bash
-   docker build -t trucksigns-backend .
-   ```
+- ### Start the backend Container:
 
    Start the backend container:
    ```bash
    docker run -d \
-   --name trucksigns-backend \
+   --name <YOUR_BACKEND_CONTAINER_NAME> \
    --network <YOUR_NETWORK_NAME> \
    -v static_data:/app/static \
    -v media_data:/app/media \
    -p 8020:8000 \
-   --restart unless-stopped \
-   trucksigns-backend
+   --restart unless-stopped \   #Guarantees restart after crash
+   <IMAGE_NAME>
    ```
    > [!NOTE]
    > you can map the port to every you want with *-p PORT:8000*
